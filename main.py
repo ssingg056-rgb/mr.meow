@@ -9,7 +9,7 @@ from threading import Thread
 import requests
 
 from database import Database
-from api_client import chat_completion, RateLimitError, AuthError, ModelError, NetworkError
+from api_client import APIClient, RateLimitError, AuthError, ModelError, NetworkError
 from history_manager import HistoryManager
 from economy.config import EconomyConfig
 from economy.manager import EconomyManager
@@ -60,6 +60,7 @@ class MrMeowBot(commands.Bot):
         self.economy: EconomyManager | None = None
 
     async def setup_hook(self):
+        self.api_client = APIClient()
         if MONGO_URI:
             self.db = Database(MONGO_URI)
             await self.db.connect()
@@ -70,8 +71,8 @@ class MrMeowBot(commands.Bot):
         else:
             print("WARNING: MONGO_URI not set — DB, History, and Economy disabled")
 
-        await self.load_extension("help_cog")
         await self.load_extension("economy.cog")
+        await self.load_extension("help_cog")
         print("Cogs loaded")
 
     async def on_ready(self):
@@ -161,7 +162,7 @@ class MrMeowBot(commands.Bot):
                 }
                 api_messages = [system_prompt] + messages
 
-                reply_text = await chat_completion(
+                reply_text = await self.api_client.chat_completion(
                     api_messages,
                     api_key=OPENROUTER_API_KEY,
                     model="mistralai/mistral-7b-instruct:free",
