@@ -25,7 +25,7 @@ class HistoryManager:
         if not doc:
             return []
         messages = doc.get("messages", [])
-        return messages[-limit:]
+        return [{"role": m["role"], "content": m["content"]} for m in messages[-limit:]]
 
     async def append_message(
         self,
