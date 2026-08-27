@@ -13,14 +13,14 @@ DB_NAME = "mr_meow"
 
 
 class Database:
-    def __init__(self):
+    def __init__(self, uri: str = None):
+        self.uri = uri or MONGO_URI
         self.client: motor.motor_asyncio.AsyncIOMotorClient | None = None
         self.db: motor.motor_asyncio.AsyncIOMotorDatabase | None = None
 
     async def connect(self):
         self.client = motor.motor_asyncio.AsyncIOMotorClient(
-            MONGO_URI,
-            server_api=ServerApi("1"),
+            self.uri,
             maxPoolSize=10,
             retryWrites=True,
         )
@@ -79,4 +79,3 @@ class Database:
             self.client.close()
 
 
-database = Database()
