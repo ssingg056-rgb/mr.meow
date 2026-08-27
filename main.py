@@ -164,8 +164,6 @@ class MrMeowBot(commands.Bot):
 
                 reply_text = await self.api_client.chat_completion(
                     api_messages,
-                    model="mistralai/mistral-7b-instruct:free",
-                    max_tokens=300,
                 )
                 await self.history.append_message(guild_id, message.channel.id, message.author.id, "assistant", reply_text)
 
