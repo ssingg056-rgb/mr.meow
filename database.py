@@ -69,8 +69,7 @@ class Database:
             unique=True,
         )
 
-        # guild_configs: _id = guild_id (natural key)
-        await self.db.guild_configs.create_index("_id", unique=True)
+
 
     def get_collection(self, name: str):
         if self.db is None:
