@@ -164,7 +164,6 @@ class MrMeowBot(commands.Bot):
 
                 reply_text = await self.api_client.chat_completion(
                     api_messages,
-                    api_key=OPENROUTER_API_KEY,
                     model="mistralai/mistral-7b-instruct:free",
                     max_tokens=300,
                 )
