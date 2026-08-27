@@ -59,12 +59,13 @@ class APIClient:
         if self._session and not self._session.closed:
             await self._session.close()
 
-    async def chat_completion(
-        self,
-        messages: list[dict[str, str]],
-        system_prompt: str,
-        max_tokens: int = 300,
-    ) -> str:
+async def chat_completion(
+    self,
+    messages: list[dict[str, str]],
+    system_prompt: Optional[str] = None,
+    max_tokens: int = 300,
+    **kwargs,
+) -> str:
         session = await self._get_session()
 
         payload = {
