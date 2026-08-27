@@ -7,10 +7,12 @@ from pymongo.server_api import ServerApi
 
 MONGO_URI = os.getenv(
     "MONGO_URI",
-    "mongodb+srv://ssingg056_db_user:ssingg056_db_user@cluster0.ivjhdbz.mongodb.net/?appName=Cluster0"
+    "mongodb+srv://ssingg056_db_user:CertifiedChad12@cluster0.ivjhdbz.mongodb.net/?appName=Cluster0"
 )
 DB_NAME = "mr_meow"
 
+
+import certifi
 
 class Database:
     def __init__(self, uri: str = None):
@@ -21,6 +23,7 @@ class Database:
     async def connect(self):
         self.client = motor.motor_asyncio.AsyncIOMotorClient(
             self.uri,
+            tlsCAFile=certifi.where(),
             maxPoolSize=10,
             retryWrites=True,
         )
