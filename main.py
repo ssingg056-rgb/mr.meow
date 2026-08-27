@@ -160,11 +160,13 @@ class MrMeowBot(commands.Bot):
                         "Respond ONLY with your final reply as Mr. Meow."
                     ),
                 }
-                api_messages = [system_prompt] + messages
+
+                system_text = system_prompt["content"]
 
                 reply_text = await self.api_client.chat_completion(
-                    api_messages,
-                )
+                    system_text,
+                    messages,
+)
                 await self.history.append_message(guild_id, message.channel.id, message.author.id, "assistant", reply_text)
 
                 if len(reply_text) > 2000:
