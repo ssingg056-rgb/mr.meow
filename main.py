@@ -161,11 +161,10 @@ class MrMeowBot(commands.Bot):
                     ),
                 }
 
-                system_text = system_prompt["content"]
+                api_messages = [system_prompt] + messages
 
                 reply_text = await self.api_client.chat_completion(
-                    system_text,
-                    messages,
+                    api_messages
 )
                 await self.history.append_message(guild_id, message.channel.id, message.author.id, "assistant", reply_text)
 
