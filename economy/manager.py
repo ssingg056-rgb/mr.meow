@@ -29,7 +29,7 @@ class EconomyManager:
         last_reward = user.get("last_msg_reward")
 
         if last_reward and now - last_reward < timedelta(seconds=cooldown):
-            return None
+            return None 
 
         amount = random.randint(min_amt, max_amt)
         new_balance = await self.add_balance(guild_id, user_id, amount)
