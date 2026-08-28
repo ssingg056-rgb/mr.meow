@@ -13,6 +13,7 @@ from api_client import APIClient, RateLimitError, AuthError, ModelError, Network
 from history_manager import HistoryManager
 from economy.config import EconomyConfig
 from economy.manager import EconomyManager
+load_dotenv()
 
 app = Flask('')
 

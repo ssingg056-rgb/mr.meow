@@ -118,8 +118,8 @@ class EconomyCog(commands.Cog):
             return
         lines = []
         for item in items:
-            stock = f" *(stock: {item['stock']})*" if item.get("stock") is not None else ""
-            lines.append(f"**{item['name']}** — `{item['price']}` {symbol}{stock}\n{item['description']}")
+            stock = f" *(stock: {item[3]})*" if len(item) > 3 and item[3] is not None else ""
+            lines.append(f"**{item[0]}** – `{item[1]}`{symbol}{stock}\n{item[2]}")
         embed = discord.Embed(
             title="🛒 Shop",
             description="\n\n".join(lines),
