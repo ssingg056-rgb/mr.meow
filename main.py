@@ -60,10 +60,15 @@ class MrMeowBot(commands.Bot):
         self.economy: EconomyManager | None = None
 
     async def setup_hook(self):
+        print("Starting setup_hook...")
         self.api_client = APIClient()
+        
         if MONGO_URI:
+            print("Connecting to MongoDB...")
             self.db = Database(MONGO_URI)
             await self.db.connect()
+            print("MongoDB connected successfully!")
+            
             self.history = HistoryManager(self.db.db)
             self.economy_config = EconomyConfig(self.db.db)
             self.economy = EconomyManager(self.db.db, self.economy_config)
@@ -71,9 +76,15 @@ class MrMeowBot(commands.Bot):
         else:
             print("WARNING: MONGO_URI not set — DB, History, and Economy disabled")
 
+        print("Attempting to load economy.cog...")
         await self.load_extension("economy.cog")
+        print("Loaded economy.cog successfully!")
+
+        print("Attempting to load help_cog...")
         await self.load_extension("help_cog")
-        print("Cogs loaded")
+        print("Loaded help_cog successfully!")
+        
+        print("All cogs loaded completely!")
 
     async def on_ready(self):
         print(f"Logged in as {self.user}!")
