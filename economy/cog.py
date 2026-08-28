@@ -21,7 +21,7 @@ class EconomyCog(commands.Cog):
             return
         if ALLOWED_GUILD_IDS and (message.guild is None or message.guild.id not in ALLOWED_GUILD_IDS):
             return
-        if message.content.startswith(("?", "mr.", "Mr.")):
+        if message.content.startswith(("mr.", "Mr.")):
             return
         if hasattr(self.bot, "economy") and self.bot.economy:
             await self.bot.economy.message_reward(message.guild.id, message.author.id)
