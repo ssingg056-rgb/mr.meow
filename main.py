@@ -178,6 +178,7 @@ class MrMeowBot(commands.Bot):
             except Exception as e:
                 print(f"CRITICAL API ERROR: {type(e).__name__} - {e}")
                 await thinking_msg.edit(content=f"Meow! System Error: ```{str(e)[:1500]}```")
+            await self.process_commands(message)
 
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.MissingPermissions):
