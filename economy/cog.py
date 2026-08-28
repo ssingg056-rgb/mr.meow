@@ -17,6 +17,7 @@ class EconomyCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        print(f"DEBUG: Received message -> {message.content}")
         if message.author.bot:
             return
         if ALLOWED_GUILD_IDS and (message.guild is None or message.guild.id not in ALLOWED_GUILD_IDS):
