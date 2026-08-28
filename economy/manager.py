@@ -16,13 +16,12 @@ class EconomyManager:
         self.transactions = db.economy_transactions
         self.shop_items = db.shop_items
 
-    async def _ensure_user(self, guild_id: int, user_id: int) -> EconomyUser:
-        user = await self.users.find_one({"guild_id": guild_id, "user_id": user_id})
-        if not user:
-            now = datetime.utcnow()
-            user = {
-                "guild_id": guild_id,
-                "user_id": user_id,
+async def _ensure_user(self, guild_id: int, user_id: int) -> EconomyUser:
+    now = datetime.utcnow()
+    await self.users.update_one(
+        {"guild_id": guild_id, "user_id": user_id},
+        {
+            "$setOnInsert": {
                 "balance": 0,
                 "total_earned": 0,
                 "last_daily": None,
@@ -30,8 +29,11 @@ class EconomyManager:
                 "last_msg_reward": None,
                 "created_at": now,
             }
-            await self.users.insert_one(user)
-        return user
+        },
+        upsert=True
+    )
+    user = await self.users.find_one({"guild_id": guild_id, "user_id": user_id})
+    return user
 
     async def get_balance(self, guild_id: int, user_id: int) -> int:
         user = await self._ensure_user(guild_id, user_id)

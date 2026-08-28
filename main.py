@@ -34,7 +34,7 @@ keep_alive()
 load_dotenv()
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY')
-MONGO_URI = os.getenv('MONGO_URI', '')
+MONGO_URI = os.getenv('MONGO_URI','')
 
 OWNER_ID = 1521196096465010719
 
