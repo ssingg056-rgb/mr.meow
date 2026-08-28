@@ -82,6 +82,8 @@ class HelpCog(commands.Cog):
         elif category == "owner":
             embed.description = "**Owner-only commands:**"
             embed.add_field(name="`mr.meow send <channel/user ID> <text>`", value="Send a message as Mr. Meow to any channel or user.", inline=False)
+            embed.add_field(name="`?addshopitem <price> <name> <description>`", value="Add a new item to the shop inventory.", inline=False)
+            embed.add_field(name="`?stockshop`", value="Quickly stock default tools into the shop.", inline=False)
 
         embed.set_footer(text="Programmed exclusively by Certified Chad")
         return embed

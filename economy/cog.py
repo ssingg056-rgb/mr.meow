@@ -177,6 +177,52 @@ class EconomyCog(commands.Cog):
         success, msg, _ = await self.bot.economy.admin_take(ctx.guild.id, member.id, amount)
         await ctx.send(f"{'✅' if success else '❌'} {msg}")
 
+    @commands.command(name="hunt")
+    async def hunt(self, ctx):
+        # Check if the user has an Iron Sword in their inventory
+        has_sword = await self.bot.economy.has_item(ctx.guild.id, ctx.author.id, "Iron Sword")
+        
+        if not has_sword:
+            await ctx.send("❌ You need an **Iron Sword** from the `?shop` before you can go hunting!")
+            return
+            
+        reward = 75
+        await self.bot.economy.add_money(ctx.guild.id, ctx.author.id, reward)
+        await ctx.send(f"🗡️ You went hunting with your Iron Sword and brought back game worth {reward} gold!")
+
+    @commands.command(name="fish")
+    async def fish(self, ctx):
+        # Check if the user has a Fishing Rod
+        has_rod = await self.bot.economy.has_item(ctx.guild.id, ctx.author.id, "Fishing Rod")
+        
+        if not has_rod:
+            await ctx.send("❌ You need a **Fishing Rod** from the `?shop` to catch fish!")
+            return
+            
+        reward = 50
+        await self.bot.economy.add_money(ctx.guild.id, ctx.author.id, reward)
+        await ctx.send(f"🎣 You cast your line and caught a big fish, selling it for {reward} gold!")
+
+    @commands.command(name="mine")
+    async def mine(self, ctx):
+        # Check if the user has a Pickaxe
+        has_pickaxe = await self.bot.economy.has_item(ctx.guild.id, ctx.author.id, "Iron Pickaxe")
+        
+        if not has_pickaxe:
+            await ctx.send("❌ You need an **Iron Pickaxe** from the `?shop` to go mining!")
+            return
+            
+        reward = 100
+        await self.bot.economy.add_money(ctx.guild.id, ctx.author.id, reward)
+        await ctx.send(f"⛏️ You mined deep into the caves and struck ore worth {reward} gold!")
+
+    @commands.command(name="addshopitem")
+    @commands.has_permissions(administrator=True)
+    async def addshopitem(self, ctx, price: int, name: str, *, description: str):
+        # Inserts the item into your economy system's shop database for this specific server
+        await self.bot.economy.add_item(ctx.guild.id, name=name, price=price, description=description)
+        await ctx.send(f"✅ Successfully added **{name}** to the shop for {price} gold!")
+
 
 async def setup(bot):
     await bot.add_cog(EconomyCog(bot))
