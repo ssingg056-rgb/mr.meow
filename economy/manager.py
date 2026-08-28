@@ -16,28 +16,28 @@ class EconomyManager:
         self.transactions = db.economy_transactions
         self.shop_items = db.shop_items
 
-async def message_reward(self, guild_id: int, user_id: int) -> Optional[int]:
-    if not await self.config.is_msg_reward_enabled(guild_id):
-        return None
+    async def message_reward(self, guild_id: int, user_id: int) -> Optional[int]:
+        if not await self.config.is_msg_reward_enabled(guild_id):
+            return None
 
-    await self._ensure_user(guild_id, user_id)
-    now = datetime.utcnow()
-    min_amt, max_amt = await self.config.get_msg_reward_range(guild_id)
-    cooldown = await self.config.get_msg_cooldown(guild_id)
+        await self._ensure_user(guild_id, user_id)
+        now = datetime.utcnow()
+        min_amt, max_amt = await self.config.get_msg_reward_range(guild_id)
+        cooldown = await self.config.get_msg_cooldown(guild_id)
 
-    user = await self.users.find_one({"guild_id": guild_id, "user_id": user_id})
-    last_reward = user.get("last_msg_reward")
+        user = await self.users.find_one({"guild_id": guild_id, "user_id": user_id})
+        last_reward = user.get("last_msg_reward")
 
-    if last_reward and now - last_reward < timedelta(seconds=cooldown):
-        return None
+        if last_reward and now - last_reward < timedelta(seconds=cooldown):
+            return None
 
-    amount = random.randint(min_amt, max_amt)
-    new_balance = await self.add_balance(guild_id, user_id, amount)
-    await self.users.update_one(
-        {"guild_id": guild_id, "user_id": user_id},
-        {"$set": {"last_msg_reward": now}}
-    )
-    return amount
+        amount = random.randint(min_amt, max_amt)
+        new_balance = await self.add_balance(guild_id, user_id, amount)
+        await self.users.update_one(
+            {"guild_id": guild_id, "user_id": user_id},
+            {"$set": {"last_msg_reward": now}}
+        )
+        return amount
 async def _ensure_user(self, guild_id: int, user_id: int) -> EconomyUser:
     now = datetime.utcnow()
     await self.users.update_one(
